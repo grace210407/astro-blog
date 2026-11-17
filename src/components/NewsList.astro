@@ -1,0 +1,22 @@
+---
+import { getCollection } from 'astro:content';
+
+interface Props { limit?: number }
+const { limit } = Astro.props;
+const news = (await getCollection('news')).sort((a, b) => b.data.date.getTime() - a.data.date.getTime()).slice(0, limit);
+const dateLabel = new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+<ul class="news-list">
+  {news.map(({ id, data }) => (
+    <li>
+      <a href={'/news/' + id + '/'}>
+        <time datetime={data.date.toISOString().slice(0, 10)}>{dateLabel.format(data.date)}</time>
+        <div class="news-item-title">
+          {data.cover && <img src={data.cover} alt="" width="80" height="52" loading="lazy" />}
+          <strong>{data.title}</strong>
+        </div>
+        <span aria-hidden="true">↗</span>
+      </a>
+    </li>
+  ))}
+</ul>
