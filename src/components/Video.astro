@@ -1,0 +1,50 @@
+---
+import type { VideoClip } from '../data/videos';
+import { siteHref } from '../data/site';
+import { productLabels } from '../data/site-settings.json';
+
+interface Props { clip: VideoClip; text?: string; card?: boolean }
+const { clip, text = clip.title, card = false } = Astro.props;
+const videoPath = siteHref(clip.file);
+const poster = siteHref(clip.poster);
+---
+{videoPath && <div class:list={['video-player', { 'video-card': card }]}>
+  <a class:list={['video-open', card ? 'video-card-link' : 'button ghost']} href={videoPath} data-video>
+    {card ? (
+      <>
+        <span class="video-poster">
+          {poster && <img src={poster} alt="" width="1280" height="720" loading="lazy" />}
+          <span class="video-play-icon" aria-hidden="true">▶</span>
+        </span>
+        <span class="video-card-caption"><strong>{text}</strong>{clip.runtime && <small>{clip.runtime}</small>}</span>
+      </>
+    ) : <><span class="play" aria-hidden="true">▶</span> {text}</>}
+  </a>
+  <dialog class="video-dialog" aria-label={clip.title}>
+    <div class="video-header">
+      <h2>{clip.title}</h2>
+      <form method="dialog"><button aria-label={productLabels.closeVideo} class="dialog-close">×</button></form>
+    </div>
+    <video controls preload="none" playsinline poster={poster || undefined} aria-label={clip.title}>
+      <source src={videoPath} />
+    </video>
+  </dialog>
+</div>}
+<script>
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+    const trigger = event.target.closest<HTMLAnchorElement>('[data-video]');
+    const dialog = trigger?.nextElementSibling;
+    if (event.defaultPrevented || !(dialog instanceof HTMLDialogElement) || typeof dialog.showModal !== 'function') return;
+    event.preventDefault();
+    dialog.showModal();
+    void dialog.querySelector('video')?.play().catch(() => {});
+  });
+
+  document.addEventListener('close', (event) => {
+    const dialog = event.target;
+    if (!(dialog instanceof HTMLDialogElement) || !dialog.classList.contains('video-dialog')) return;
+    dialog.querySelector('video')?.pause();
+    if (dialog.previousElementSibling instanceof HTMLElement) dialog.previousElementSibling.focus();
+  }, true);
+</script>

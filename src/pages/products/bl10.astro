@@ -1,0 +1,116 @@
+---
+import Site from '../../layouts/Site.astro';
+import ContentLink from '../../components/ContentLink.astro';
+import Video from '../../components/Video.astro';
+import { emailHref, siteHref } from '../../data/site';
+import { homeHas } from '../../data/home';
+import { bl10Tutorials } from '../../data/videos';
+import product from '../../data/products/bl10.json';
+import { productLabels } from '../../data/site-settings.json';
+
+const { setup } = product;
+const finishes = (product.finishes ?? []).filter(({ image }) => siteHref(image)).map((finish) => ({
+  ...finish,
+  buttonColor: /^#[0-9a-f]{6}$/i.test(finish.color) ? finish.color : undefined,
+}));
+const defaultFinish = finishes[0];
+const datasheet = siteHref(product.datasheet);
+---
+<Site title={product.title} description={product.description}>
+  <section class="hero detail-hero">
+    <div class="hero-light" aria-hidden="true"></div>
+    <div class="shell hero-grid">
+      <div class="hero-content">
+        <a class="breadcrumbs" href={homeHas('headsets') ? '/#products' : '/'}>{productLabels.breadcrumb} <span aria-hidden="true">/</span> {product.model}</a>
+        <p class="eyebrow">{product.category}</p>
+        <h1>{product.model}<span class="cobalt">.</span></h1>
+        <p class="hero-copy">{product.headline}</p>
+        <div class="actions">
+          <ContentLink action={product.heroSetup} class="button" />
+          <ContentLink action={product.heroVideos} class="button ghost" />
+        </div>
+        {finishes.length > 1 && <div class="color-picker">
+          <span>{product.finishLabel} <strong id="color-name" aria-live="polite">{defaultFinish.label}</strong></span>
+          {finishes.map(({ label, buttonColor, image, imageAlt }, index) => (
+            <button
+              type="button" class="swatch" style={buttonColor ? { background: buttonColor } : undefined}
+              data-finish={label} data-img={siteHref(image)} data-alt={imageAlt}
+              aria-label={label} aria-pressed={index === 0}></button>
+          ))}
+        </div>}
+      </div>
+      {defaultFinish && <figure class="hero-visual">
+        <img id="finish-image" src={siteHref(defaultFinish.image)} alt={defaultFinish.imageAlt} fetchpriority="high" />
+      </figure>}
+    </div>
+  </section>
+
+  <section class="section feature-band">
+    <div class="shell">
+      <p class="eyebrow">{product.featuresEyebrow}</p>
+      <h2>{product.featuresHeading}</h2>
+      <div class="editorial-grid">
+        {(product.features ?? []).map(({ title, text }) => <div><h3>{title}</h3><p>{text}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section id="setup" class="section tech">
+    <div class="shell tech-grid">
+      <div>
+        <p class="eyebrow">{setup.eyebrow}</p>
+        <h2>{setup.heading}</h2>
+        <ol class="steps">{(setup.steps ?? []).map((step) => <li>{step.line}</li>)}</ol>
+        <ContentLink action={setup.action} />
+      </div>
+      {siteHref(setup.image) && <div class="demo-still">
+        <img src={siteHref(setup.image)} loading="lazy" alt={setup.imageAlt} />
+        {setup.caption && <div class="demo-label"><span class="status-light" aria-hidden="true"></span> {setup.caption}</div>}
+      </div>}
+    </div>
+  </section>
+
+  {bl10Tutorials.length > 0 && <section id="videos" class="section tutorial-band">
+    <div class="shell">
+      <p class="eyebrow">{product.videoEyebrow}</p>
+      <div class="section-heading">
+        <h2>{product.videoHeading}</h2>
+        <p>{product.videoText}</p>
+      </div>
+      <div class="tutorial-grid">
+        {bl10Tutorials.map((clip) => <Video clip={clip} card />)}
+      </div>
+    </div>
+  </section>}
+
+  <section id="specifications" class="section specs">
+    <div class="shell specs-grid">
+      <div>
+        <p class="eyebrow">{product.specsEyebrow}</p>
+        <h2>{productLabels.specifications}</h2>
+        {datasheet && <a class="text-link" href={datasheet} download>{product.datasheetLabel} <span aria-hidden="true">↓</span></a>}
+      </div>
+      <dl>{(product.specs ?? []).map(({ label, value }) => <div><dt>{label}</dt><dd>{value}</dd></div>)}</dl>
+    </div>
+  </section>
+
+  <section class="partners">
+    <div class="shell partners-grid">
+      <h2>{product.partnerHeading}</h2>
+      <div><p>{product.partnerText}</p><a class="button button-white" href={emailHref(product.inquirySubject)}>{product.partnerLabel} <span aria-hidden="true">↗</span></a></div>
+    </div>
+  </section>
+</Site>
+<script>
+  const swatches = document.querySelectorAll<HTMLButtonElement>('[data-finish]');
+  const image = document.querySelector<HTMLImageElement>('#finish-image');
+  const label = document.querySelector('#color-name');
+  swatches.forEach((swatch) => swatch.addEventListener('click', () => {
+    const { finish, img, alt } = swatch.dataset;
+    if (!finish || !img || !image || !label) return;
+    swatches.forEach((button) => button.setAttribute('aria-pressed', String(button === swatch)));
+    image.src = img;
+    image.alt = alt ?? '';
+    label.textContent = finish;
+  }));
+</script>

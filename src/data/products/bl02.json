@@ -1,0 +1,100 @@
+{
+  "model": "BL02",
+  "image": "/media/bl02.webp",
+  "feature": "Tuned for gaming",
+  "summary": "40 mm drivers and a wide padded headband.",
+  "category": "Wired & Wireless Gaming Headset",
+  "headline": "Game-tuned sound. Wired or tri-mode wireless.",
+  "description": "40 mm drivers, a wide padded headband and soft over-ear cushions. Choose a wired BL02 or a separate tri-mode wireless model.",
+  "features": [
+    {
+      "title": "40 mm drivers",
+      "text": "Game-tuned audio in a proprietary over-ear design."
+    },
+    {
+      "title": "Wide padded headband",
+      "text": "A broad headband and soft ear cushions help keep the headset comfortable during play."
+    },
+    {
+      "title": "Dual-mic ENC over USB",
+      "text": "The USB-A wired model uses two microphones to reduce background noise in team chat."
+    }
+  ],
+  "specs": [
+    {
+      "label": "Drivers",
+      "value": "40 mm"
+    },
+    {
+      "label": "Wired frequency response",
+      "value": "20 Hz–20 kHz"
+    },
+    {
+      "label": "Fit",
+      "value": "Over-ear"
+    }
+  ],
+  "variants": [
+    {
+      "name": "USB-A wired",
+      "description": "Digital audio with dual-mic ENC and Windows audio control.",
+      "specs": [
+        {
+          "label": "USB audio and volume sync",
+          "value": "Windows, macOS and Linux"
+        },
+        {
+          "label": "Audio control software",
+          "value": "Windows only. Four presets, custom EQ and adjustable sidetone."
+        },
+        {
+          "label": "Peak limiter",
+          "value": "Factory preset"
+        }
+      ]
+    },
+    {
+      "name": "3.5 mm wired",
+      "description": "Analog audio for devices with a compatible headset jack. Plug into BL10 for desktop Game/Chat control on Windows.",
+      "specs": [
+        {
+          "label": "Connector",
+          "value": "3.5 mm CTIA"
+        }
+      ],
+      "action": {
+        "label": "Explore the BL10 controller",
+        "url": "/products/bl10/"
+      }
+    },
+    {
+      "name": "Tri-mode wireless",
+      "description": "Play over 2.4 GHz wireless, Bluetooth 5.3 or a 3.5 mm connection. Switch between Game and Music EQ on the headset.",
+      "specs": [
+        {
+          "label": "Microphones",
+          "value": "Detachable boom and built-in microphone options"
+        },
+        {
+          "label": "Battery",
+          "value": "1,000 mAh"
+        },
+        {
+          "label": "Rated playtime at 50% volume",
+          "value": "Approx. 60 h with RGB off or 38 h with RGB on. Actual playtime varies."
+        },
+        {
+          "label": "USB-C port",
+          "value": "Charging only"
+        }
+      ]
+    }
+  ],
+  "imageAlt": "BL02 over-ear gaming headset with boom microphone",
+  "specsLabel": "View specifications",
+  "inquiryLabel": "Request product information",
+  "inquirySubject": "BL02 Product Inquiry",
+  "partnerHeading": "Bring BL02 to your market.",
+  "partnerText": "Contact BLUCALM for samples, sales materials and regional distribution.",
+  "partnerLabel": "Discuss partnership"
+}

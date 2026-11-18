@@ -1,6 +1,7 @@
 ---
 import { getCollection, render } from 'astro:content';
 import Site from '../../layouts/Site.astro';
+import { brandName, news } from '../../data/site-settings.json';
 
 export async function getStaticPaths() {
   return (await getCollection('news')).map((post) => ({ params: { slug: post.id }, props: { post } }));
@@ -9,15 +10,15 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 const date = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' });
 ---
-<Site title={post.data.title + ' | BLUCALM Gaming'} description={post.data.description}>
+<Site title={post.data.title + ' | ' + brandName} description={post.data.description}>
   <article class="section news-page">
     <div class="shell article-copy">
-      <a class="breadcrumbs" href="/news/">← All News</a>
+      <a class="breadcrumbs" href="/news/">{news.backLabel}</a>
       <p class="eyebrow">{post.data.category} <span aria-hidden="true">·</span> {date.format(post.data.date)}</p>
       <h1>{post.data.title}</h1>
       {post.data.cover && <img class="article-cover" src={post.data.cover} alt={post.data.coverAlt ?? ''} decoding="async" />}
       <div class="prose"><Content /></div>
-      {post.data.source && <a class="text-link" href={post.data.source} target="_blank" rel="noopener noreferrer">Read more on BLUCALM Technology ↗</a>}
+      {post.data.source && <a class="text-link" href={post.data.source} target="_blank" rel="noopener noreferrer">{news.sourceLabel} <span aria-hidden="true">↗</span></a>}
     </div>
   </article>
 </Site>

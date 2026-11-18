@@ -1,26 +1,46 @@
 import socialLinks from './social-links.json';
+import settings from './site-settings.json';
 
-function publicLink(value?: string | null) {
-  const url = value?.trim() ?? '';
-  return /^https?:\/\//i.test(url) ? url : '';
+export interface Action { label: string; url: string }
+
+export function siteHref(value?: string) {
+  const href = value?.trim() ?? '';
+  if (/^(?:\/(?![\/\\])|#)[^\\]*$/.test(href)) return href;
+  return publicLink(href);
 }
 
+export function emailHref(subject?: string) {
+  const email = 'mailto:' + settings.email;
+  return subject ? email + '?subject=' + encodeURIComponent(subject) : email;
+}
+
+export function publicLink(value?: string | null) {
+  const url = value?.trim() ?? '';
+  if (!/^https?:\/\//i.test(url)) return '';
+  try {
+    const parsed = new URL(url);
+    return parsed.username || parsed.password ? '' : parsed.href;
+  } catch {
+    return '';
+  }
+}
+
+function discordLink(value?: string | null) {
+  const invite = value?.trim() ?? '';
+  const match = invite.match(/^(?:https?:\/\/)?(?:www\.)?(?:discord\.gg\/|discord(?:app)?\.com\/invite\/)([a-z\d-]+)\/?(?:[?#].*)?$/i);
+  return match ? 'https://discord.gg/' + match[1] : '';
+}
+
+const discord = discordLink(socialLinks.discord);
+
 export const brand = {
-  email: 'info@blucalmtech.com',
-  corporate: 'https://www.blucalmtech.com/',
-  discord: publicLink(socialLinks.discord),
-  social: Object.entries({
-    LinkedIn: socialLinks.linkedin,
-    Instagram: socialLinks.instagram,
-    Facebook: socialLinks.facebook,
-    YouTube: socialLinks.youtube,
-    TikTok: socialLinks.tiktok,
-    X: socialLinks.x,
-  }).map(([label, value]) => ({ label, url: publicLink(value) })).filter(({ url }) => url),
+  email: settings.email,
+  corporate: publicLink(settings.corporate),
+  discord,
+  social: Object.entries(settings.icons).map(([name, { label, image }]) => ({
+    label,
+    image,
+    url: name === 'discord' ? discord : publicLink(socialLinks[name as keyof typeof socialLinks]),
+  })).filter(({ url }) => url),
 };
 
-export const headsets = [
-  { model: 'BL03', image: '/media/bl03.webp', feature: 'Hi-Fi-inspired design', summary: 'A proprietary housing with a metal and ABS finish.', size: 'main' },
-  { model: 'BL02', image: '/media/bl02.webp', feature: 'Tuned for gaming', summary: '40 mm drivers and a wide padded headband.', size: 'small' },
-  { model: 'BL01', image: '/media/bl01.webp', feature: 'Suspension fit', summary: '50 mm drivers and a self-adjusting headband.', size: 'small' },
-];

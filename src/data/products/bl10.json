@@ -1,0 +1,112 @@
+{
+  "title": "BL10 Desktop Game Audio Controller | BLUCALM Gaming",
+  "description": "Mix game audio and team chat with BL10. Explore the hardware controls, Windows setup and specifications.",
+  "model": "BL10",
+  "category": "Desktop Game Audio Controller",
+  "headline": "Mix and balance audio from your game and voice chat apps instantly.",
+  "heroSetup": {
+    "label": "Setup Guide",
+    "url": "#setup"
+  },
+  "heroVideos": {
+    "label": "Watch tutorials",
+    "url": "#videos"
+  },
+  "finishLabel": "Color",
+  "finishes": [
+    {
+      "label": "Black",
+      "color": "#23262b",
+      "image": "/media/bl10-black.webp",
+      "imageAlt": "BL10 game audio controller in black"
+    },
+    {
+      "label": "White",
+      "color": "#eff3f7",
+      "image": "/media/bl10-white.webp",
+      "imageAlt": "BL10 game audio controller in white"
+    }
+  ],
+  "featuresEyebrow": "On-device Controls",
+  "featuresHeading": "Make the adjustment without leaving the game.",
+  "features": [
+    {
+      "title": "Game/Chat balance",
+      "text": "Bring teammates forward or give game audio more room with the large dial."
+    },
+    {
+      "title": "Dedicated controls",
+      "text": "Reach mic mute and Clutch Boost directly from the controller."
+    },
+    {
+      "title": "On-screen feedback",
+      "text": "See the active sound mode and adjustments on the built-in display."
+    }
+  ],
+  "setup": {
+    "eyebrow": "Windows 10 / 11",
+    "heading": "Set up Game/Chat.",
+    "steps": [
+      {
+        "line": "Connect BL10 to your PC over USB and plug your 3.5 mm headset into BL10."
+      },
+      {
+        "line": "Open Windows Volume Mixer and set your game output to BL Game."
+      },
+      {
+        "line": "Set your voice chat app output to BL Chat, then turn the dial to balance the two."
+      }
+    ],
+    "action": {
+      "label": "Choose your Windows tutorial",
+      "url": "#videos"
+    },
+    "image": "/media/chatmix-poster.webp",
+    "imageAlt": "Windows 11 Volume Mixer showing audio routing for BL10",
+    "caption": "Actual Windows setup"
+  },
+  "videoEyebrow": "BL10 Support",
+  "videoHeading": "Video guides.",
+  "videoText": "Set up ChatMix for your Windows version or tour all the BL10 controls.",
+  "specsEyebrow": "Product Details",
+  "specs": [
+    {
+      "label": "Host connection",
+      "value": "USB-A to computer"
+    },
+    {
+      "label": "Headset connection",
+      "value": "3.5 mm headset or IEM"
+    },
+    {
+      "label": "Compatibility",
+      "value": "Windows PC, macOS and Linux"
+    },
+    {
+      "label": "Game/Chat balance",
+      "value": "Windows 10 / 11 only. One-time setup in Windows Volume Mixer."
+    },
+    {
+      "label": "Dimensions",
+      "value": "145 × 95 × 60 mm (height measured to the top of the knob)"
+    },
+    {
+      "label": "Weight",
+      "value": "Approx. 295 g, excluding cable"
+    },
+    {
+      "label": "Cable length",
+      "value": "2 m ± 0.15 m"
+    },
+    {
+      "label": "Colors",
+      "value": "Black, White"
+    }
+  ],
+  "datasheetLabel": "Download Datasheet (PDF)",
+  "datasheet": "/media/bl10-datasheet-en.pdf",
+  "partnerHeading": "Bring BL10 to your market.",
+  "partnerText": "Contact BLUCALM to discuss samples, sales materials and regional distribution.",
+  "partnerLabel": "Discuss Partnership",
+  "inquirySubject": "BL10 Product Inquiry"
+}

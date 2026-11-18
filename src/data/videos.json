@@ -1,0 +1,28 @@
+{
+  "feature": {
+    "title": "BL10 ChatMix feature demo",
+    "file": "/media/bl10-chatmix-feature.mp4",
+    "poster": "/media/bl10-chatmix-feature.webp",
+    "runtime": "0:19"
+  },
+  "tutorials": [
+    {
+      "title": "ChatMix setup · Windows 10",
+      "file": "/media/bl10-chatmix-win10.mp4",
+      "poster": "/media/bl10-chatmix-win10.webp",
+      "runtime": "1:07"
+    },
+    {
+      "title": "ChatMix setup · Windows 11",
+      "file": "/media/bl10-chatmix-win11.mp4",
+      "poster": "/media/bl10-chatmix-win11.webp",
+      "runtime": "1:05"
+    },
+    {
+      "title": "BL10 controls and user guide",
+      "file": "/media/bl10-user-guide.mp4",
+      "poster": "/media/bl10-user-guide.webp",
+      "runtime": "2:04"
+    }
+  ]
+}

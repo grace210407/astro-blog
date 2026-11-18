@@ -1,0 +1,121 @@
+---
+import NewsList from './NewsList.astro';
+import Video from './Video.astro';
+import ContentLink from './ContentLink.astro';
+import { prepareHomeSection, type HomeSection } from '../data/home';
+import { brand, emailHref, siteHref } from '../data/site';
+import { headsets } from '../data/headsets';
+import { featureDemo } from '../data/videos';
+import content from '../data/home-content.json';
+
+interface Props {
+  section: HomeSection;
+  anchor?: string;
+  primary?: boolean;
+}
+
+const { section, anchor, primary = false } = Astro.props;
+const block = prepareHomeSection(section);
+const Heading = primary ? 'h1' : 'h2';
+---
+{block.type === 'hero' && (
+  <section id={anchor} class="hero home-hero">
+    <img class="home-hero-art" data-field="image" src={block.image} alt={block.imageAlt} width="1672" height="941" fetchpriority={primary ? 'high' : 'auto'} />
+    <div class="shell home-hero-inner">
+      <div class="hero-content">
+        <p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p>
+        <Heading class="home-hero-heading" data-field="heading">{block.heading}</Heading>
+        <p class="hero-copy" data-field="text">{block.text}</p>
+        <div class="actions"><ContentLink action={content.heroAction} class="button" /></div>
+      </div>
+    </div>
+  </section>
+)}
+{block.type === 'demo' && (
+  <section id={anchor} class="section tech">
+    <div class="shell tech-grid">
+      <div>
+        <p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p>
+        <h2 data-field="heading">{block.heading}</h2>
+        <p data-field="text">{block.text}</p>
+        <ContentLink action={content.demoAction} />
+      </div>
+      {featureDemo && <Video clip={featureDemo} text={content.demoLabel} card />}
+    </div>
+  </section>
+)}
+{block.type === 'headsets' && (
+  <section id={anchor} class="section products">
+    <div class="shell">
+      <div class="section-heading">
+        <div><p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p><h2 data-field="heading">{block.heading}</h2></div>
+        <p data-field="text">{block.text}</p>
+      </div>
+      <div class="headset-grid">
+        {headsets.map(({ model, slug, image, feature, summary, size }) => (
+          <a href={'/products/' + slug + '/'} aria-label={content.headsetLabel + ' ' + model} class:list={['headset-card', size === 'main' && 'headset-primary']}>
+            <div class="headset-copy">
+              <h3>{model}</h3><strong>{feature}</strong><p>{summary}</p>
+              <span class="headset-card-link">{content.headsetLabel} <span aria-hidden="true">↗</span></span>
+            </div>
+            {siteHref(image) && <img src={siteHref(image)} alt="" loading="lazy" />}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+{block.type === 'company' && (
+  <section id={anchor} class="section editorial">
+    <div class="shell">
+      <p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p>
+      <div class="section-heading"><h2 data-field="heading">{block.heading}</h2></div>
+      <div class="editorial-grid">
+        {(content.companyCards ?? []).map(({ heading, text, action }, index) => (
+          <div><h3>{heading}</h3><p data-field={index === 0 && !text ? 'text' : undefined}>{index === 0 ? text || block.text : text}</p><ContentLink action={action} /></div>
+        ))}
+      </div>
+    </div>
+  </section>
+)}
+{block.type === 'news' && (
+  <section id={anchor} class="section news-band">
+    <div class="shell news-grid">
+      <div><p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p><h2 data-field="heading">{block.heading}</h2><ContentLink action={content.newsAction} /></div>
+      <NewsList limit={2} />
+    </div>
+  </section>
+)}
+{block.type === 'community' && (
+  <section id={anchor} class="community">
+    <div class="shell community-row">
+      <div><p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p><h2 data-field="heading">{block.heading}</h2><p data-field="text">{block.text}</p></div>
+      {brand.discord ? (
+        <a class="button ghost" href={brand.discord} target="_blank" rel="noopener noreferrer">{content.discordLabel} <span aria-hidden="true">↗</span></a>
+      ) : <a class="button ghost" href={emailHref(content.discordSubject)}>{content.discordFallbackLabel}</a>}
+    </div>
+  </section>
+)}
+{block.type === 'partners' && (
+  <section id={anchor} class="partners">
+    <div class="shell partners-grid">
+      <div><p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p><h2 data-field="heading">{block.heading}</h2></div>
+      <div>
+        <p data-field="text">{block.text}</p>
+        <div class="actions"><a class="button button-white" href={emailHref(content.partnerSubject)}>{content.partnerLabel} <span aria-hidden="true">↗</span></a><a class="button ghost" href={emailHref(content.informationSubject)}>{content.informationLabel}</a></div>
+      </div>
+    </div>
+  </section>
+)}
+{block.type === 'story' && (
+  <section id={anchor} class="section tech">
+    <div class:list={['shell', block.image && 'tech-grid']} data-story-grid>
+      <div>
+        <p class="eyebrow" data-field="eyebrow">{block.eyebrow}</p>
+        <h2 data-field="heading">{block.heading}</h2>
+        <p class="story-text" data-field="text">{block.text}</p>
+      </div>
+      <img data-field="image" class="story-image" hidden={!block.image} src={block.image || undefined} alt={block.imageAlt} loading="lazy" />
+    </div>
+  </section>
+)}

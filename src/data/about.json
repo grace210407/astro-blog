@@ -1,0 +1,38 @@
+{
+  "title": "About BLUCALM Gaming",
+  "description": "Get to know the audio engineering team behind BLUCALM Gaming and how we work with regional brands and distributors.",
+  "hero": {
+    "eyebrow": "About BLUCALM",
+    "heading": "Built around game audio.",
+    "text": "BLUCALM develops desktop game audio controls, Windows software and gaming headsets. We work with regional distributors and brands that want to build out their gaming audio line.",
+    "image": "/media/bl10-product-photo.webp",
+    "imageAlt": "Production BL10 with its ChatMix display and both rear cables connected",
+    "caption": "BL10 desktop game audio controller"
+  },
+  "sections": [
+    {
+      "eyebrow": "Audio engineering",
+      "heading": "From the headset to the desktop.",
+      "text": "Our team draws on more than 20 years of experience in digital signal processing and communications hardware. That background shapes how we develop audio hardware and controls for game sound and voice chat.\n\nBL10 pairs physical controls for day-to-day adjustments with a Windows desktop app. The BL01, BL02 and BL03 headsets round out the range, with a proprietary housing design for BL03.",
+      "actions": [
+        {
+          "label": "Explore BL10",
+          "url": "/products/bl10/"
+        },
+        {
+          "label": "Explore our technology",
+          "url": "/technology/"
+        }
+      ]
+    }
+  ],
+  "partners": {
+    "eyebrow": "Regional partnerships",
+    "heading": "Bring gaming audio to your market.",
+    "text": "Talk to us about evaluating samples, local product requirements and the Windows software, demo videos, datasheets and sales materials available to support your launch.",
+    "actionLabel": "Discuss a partnership",
+    "subject": "BLUCALM Gaming Partnership",
+    "businessText": "For our business audio products, visit",
+    "businessLabel": "Blucalm Technology"
+  }
+}

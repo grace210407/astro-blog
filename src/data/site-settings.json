@@ -1,0 +1,109 @@
+{
+  "brandName": "BLUCALM Gaming",
+  "logo": "/media/blucalm-logo.webp",
+  "logoCompanion": "GAMING",
+  "email": "info@blucalmtech.com",
+  "corporate": "https://www.blucalmtech.com/",
+  "navigation": [
+    {
+      "label": "Products",
+      "url": "/#products"
+    },
+    {
+      "label": "Technology",
+      "url": "/technology/"
+    },
+    {
+      "label": "News",
+      "url": "/news/"
+    },
+    {
+      "label": "Community",
+      "url": "/#community"
+    },
+    {
+      "label": "Partners",
+      "url": "/#partners"
+    },
+    {
+      "label": "About",
+      "url": "/about/"
+    }
+  ],
+  "contactAction": {
+    "label": "Talk to Us",
+    "url": "/#partners"
+  },
+  "footerLinks": [
+    {
+      "label": "Support",
+      "url": "/products/bl10/#setup"
+    },
+    {
+      "label": "News",
+      "url": "/news/"
+    },
+    {
+      "label": "About",
+      "url": "/about/"
+    },
+    {
+      "label": "Contact",
+      "url": "/#partners"
+    }
+  ],
+  "followLabel": "Follow BLUCALM",
+  "menuLabel": "Menu",
+  "skipLabel": "Skip to content",
+  "icons": {
+    "discord": {
+      "label": "Discord",
+      "image": "/media/social/discord.svg"
+    },
+    "linkedin": {
+      "label": "LinkedIn",
+      "image": "/media/social/linkedin.svg"
+    },
+    "instagram": {
+      "label": "Instagram",
+      "image": "/media/social/instagram.svg"
+    },
+    "facebook": {
+      "label": "Facebook",
+      "image": "/media/social/facebook.svg"
+    },
+    "youtube": {
+      "label": "YouTube",
+      "image": "/media/social/youtube.svg"
+    },
+    "tiktok": {
+      "label": "TikTok",
+      "image": "/media/social/tiktok.svg"
+    },
+    "x": {
+      "label": "X",
+      "image": "/media/social/x.svg"
+    }
+  },
+  "news": {
+    "title": "News | BLUCALM Gaming",
+    "description": "Announcements and event updates from BLUCALM Gaming.",
+    "eyebrow": "BLUCALM Gaming",
+    "heading": "Latest news.",
+    "backLabel": "All News",
+    "sourceLabel": "Read the original article"
+  },
+  "notFound": {
+    "title": "Page not found | BLUCALM Gaming",
+    "description": "The requested page could not be found.",
+    "heading": "Page not found.",
+    "label": "Back to Home"
+  },
+  "productLabels": {
+    "breadcrumb": "Gaming Products",
+    "design": "Design & audio",
+    "specifications": "Specifications",
+    "related": "Explore",
+    "closeVideo": "Close video"
+  }
+}

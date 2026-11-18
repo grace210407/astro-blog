@@ -1,0 +1,42 @@
+---
+import Site from '../layouts/Site.astro';
+import ContentLink from '../components/ContentLink.astro';
+import ContentPhoto from '../components/ContentPhoto.astro';
+import { brand, emailHref } from '../data/site';
+import page from '../data/about.json';
+
+const { hero, sections = [], partners } = page;
+---
+<Site title={page.title} description={page.description}>
+  <section class="section about-intro">
+    <div class="shell about-grid">
+      <div>
+        {hero.eyebrow && <p class="eyebrow">{hero.eyebrow}</p>}
+        <h1>{hero.heading}</h1>
+        {hero.text && <p class="about-lede editable-copy">{hero.text}</p>}
+      </div>
+      <ContentPhoto photo={hero} highPriority />
+    </div>
+  </section>
+  {sections.map(({ eyebrow, heading, text, actions }) => (
+    <section class="section editorial">
+      <div class="shell about-grid">
+        <div>{eyebrow && <p class="eyebrow">{eyebrow}</p>}<h2>{heading}</h2></div>
+        <div class="about-copy">
+          {text && <p class="editable-copy">{text}</p>}
+          {actions?.length > 0 && <div class="actions">{actions.map((action) => <ContentLink action={action} />)}</div>}
+        </div>
+      </div>
+    </section>
+  ))}
+  <section id="partners" class="section tech">
+    <div class="shell about-grid">
+      <div>{partners.eyebrow && <p class="eyebrow">{partners.eyebrow}</p>}<h2>{partners.heading}</h2></div>
+      <div class="about-copy">
+        <p class="editable-copy">{partners.text}</p>
+        <a class="button" href={emailHref(partners.subject)}>{partners.actionLabel} <span aria-hidden="true">↗</span></a>
+        {brand.corporate && <p class="about-business">{partners.businessText} <a class="text-link" href={brand.corporate} target="_blank" rel="noopener noreferrer">{partners.businessLabel} <span aria-hidden="true">↗</span></a>.</p>}
+      </div>
+    </div>
+  </section>
+</Site>

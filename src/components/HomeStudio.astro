@@ -1,0 +1,288 @@
+---
+import { readdirSync } from 'node:fs';
+import { join, relative, sep } from 'node:path';
+import HomeSection from './HomeSection.astro';
+import { homeSections, homeTemplates } from '../data/home';
+
+const mediaRoot = 'public/media';
+const images = readdirSync(mediaRoot, { recursive: true, withFileTypes: true })
+  .filter((file) => file.isFile() && /\.(avif|jpe?g|png|webp)$/i.test(file.name))
+  .map((file) => relative(mediaRoot, join(file.parentPath, file.name)).split(sep).join('/'))
+  .sort();
+---
+<aside class="home-studio" id="home-studio" aria-label="首页编辑器" data-sections={JSON.stringify(homeSections)} data-templates={JSON.stringify(homeTemplates)} hidden>
+  <div class="studio-header">
+    <strong>首页编辑器</strong>
+    <a href="/" aria-label="退出编辑">退出</a>
+  </div>
+  <div class="studio-scroll">
+    <p>点击页面模块即可选中，也可以拖动模块排序。</p>
+    <label for="studio-template">模块模板</label>
+    <select id="studio-template">
+      {homeTemplates.map(({ type, label }) => <option value={type}>{label}</option>)}
+    </select>
+    <div class="studio-actions">
+      <button type="button" data-studio-action="add">添加模块</button>
+      <button type="button" data-studio-action="replace">替换选中</button>
+    </div>
+    <ol id="studio-order" aria-label="模块顺序"></ol>
+    <div class="studio-actions">
+      <button type="button" data-studio-action="up">上移</button>
+      <button type="button" data-studio-action="down">下移</button>
+      <button type="button" data-studio-action="remove">删除</button>
+    </div>
+    <fieldset id="studio-fields">
+      <legend>编辑选中模块</legend>
+      <label>小标题<input data-edit-field="eyebrow" /></label>
+      <label>标题<input data-edit-field="heading" /></label>
+      <label id="studio-text">正文<textarea data-edit-field="text" rows="3"></textarea></label>
+      <label id="studio-image">图片
+        <select data-edit-field="image">
+          <option value="">选择素材</option>
+          {images.map((file) => <option value={'/media/' + file}>{file}</option>)}
+        </select>
+      </label>
+      <label id="studio-alt">图片描述<input data-edit-field="imageAlt" /></label>
+    </fieldset>
+  </div>
+  <div class="studio-footer">
+    <p role="status" id="studio-status">草稿保存在此浏览器</p>
+    <button type="button" data-studio-action="export">导出首页布局</button>
+    <button type="button" data-studio-action="reset">恢复已保存布局</button>
+  </div>
+</aside>
+{homeTemplates.map(({ type }) => (
+  <template data-home-template={type}>
+    <div data-home-section={type}><HomeSection section={{ type }} /></div>
+  </template>
+))}
+
+<script>
+  import type { HomeSection } from '../data/home';
+
+  const panel = document.querySelector<HTMLElement>('#home-studio');
+  const canvas = document.querySelector<HTMLElement>('#home-sections');
+
+  if (panel && canvas && new URLSearchParams(location.search).get('edit') === '1') {
+    const defaults = JSON.parse(panel.dataset.sections ?? '[]') as HomeSection[];
+    const types = JSON.parse(panel.dataset.templates ?? '[]') as (HomeSection & { label: string })[];
+    const picker = panel.querySelector<HTMLSelectElement>('#studio-template')!;
+    const list = panel.querySelector<HTMLOListElement>('#studio-order')!;
+    const fields = panel.querySelector<HTMLFieldSetElement>('#studio-fields')!;
+    const status = panel.querySelector<HTMLElement>('#studio-status')!;
+    const inputs = [...fields.querySelectorAll<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>('[data-edit-field]')];
+    const templates = new Map(
+      [...document.querySelectorAll<HTMLTemplateElement>('template[data-home-template]')].map((template) => [template.dataset.homeTemplate, template]),
+    );
+    const draftKey = 'blucalm-home-layout-v1';
+    let sections = structuredClone(defaults);
+    let selected = 0;
+    let dragging: number | undefined;
+
+    try {
+      const draft = JSON.parse(localStorage.getItem(draftKey) ?? 'null');
+      if (Array.isArray(draft)) sections = draft.filter((section) => templates.has(section?.type));
+    } catch {
+      status.textContent = '当前浏览器无法读取本地草稿';
+    }
+
+    function saveDraft() {
+      try {
+        localStorage.setItem(draftKey, JSON.stringify(sections));
+        status.textContent = '草稿已保存在此浏览器';
+      } catch {
+        status.textContent = '可通过导出保留草稿';
+      }
+    }
+
+    function fillBlock(element: Element, section: HomeSection) {
+      const fallback = types.find(({ type }) => type === section.type);
+      for (const field of ['heading', 'eyebrow', 'text'] as const) {
+        const node = element.querySelector('[data-field="' + field + '"]');
+        if (node) node.textContent = (field === 'heading' ? section[field]?.trim() || fallback?.[field] : section[field] ?? fallback?.[field]) ?? '';
+      }
+      const image = element.querySelector<HTMLImageElement>('[data-field="image"]');
+      if (!image) return;
+      const source = section.image || fallback?.image || '';
+      if (source.startsWith('/media/')) image.src = source;
+      else image.removeAttribute('src');
+      image.alt = section.imageAlt ?? fallback?.imageAlt ?? '';
+      image.hidden = !image.hasAttribute('src');
+      element.querySelector('[data-story-grid]')?.classList.toggle('tech-grid', !image.hidden);
+    }
+
+    function select(index: number) {
+      selected = index;
+      canvas.setAttribute('data-selected', String(index));
+      [...canvas.children].forEach((block, position) => block.classList.toggle('studio-selected', position === selected));
+      list.querySelectorAll('button').forEach((button, position) => button.setAttribute('aria-pressed', String(position === selected)));
+      const section = sections[selected];
+      fields.disabled = !section;
+      for (const button of panel.querySelectorAll<HTMLButtonElement>('button[data-studio-action]')) {
+        const action = button.dataset.studioAction;
+        if (action === 'up') button.disabled = !section || selected === 0;
+        if (action === 'down') button.disabled = !section || selected >= sections.length - 1;
+        if (action === 'replace' || action === 'remove') button.disabled = !section;
+      }
+      if (!section) return;
+      picker.value = section.type;
+      panel.querySelector<HTMLElement>('#studio-text')!.hidden = section.type === 'news';
+      const usesImage = section.type === 'hero' || section.type === 'story';
+      panel.querySelector<HTMLElement>('#studio-image')!.hidden = !usesImage;
+      panel.querySelector<HTMLElement>('#studio-alt')!.hidden = !usesImage;
+      for (const input of inputs) {
+        const key = input.dataset.editField as Exclude<keyof HomeSection, 'type'>;
+        input.value = section[key] ?? '';
+      }
+    }
+
+    function render() {
+      canvas.replaceChildren();
+      list.replaceChildren();
+      sections.forEach((section, index) => {
+        const block = templates.get(section.type)?.content.firstElementChild?.cloneNode(true);
+        if (!(block instanceof HTMLElement)) return;
+        block.dataset.studioIndex = String(index);
+        block.draggable = true;
+        fillBlock(block, section);
+        canvas.append(block);
+
+        const item = document.createElement('li');
+        item.draggable = true;
+        item.dataset.studioIndex = String(index);
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = types.find(({ type }) => type === section.type)?.label ?? section.type;
+        button.addEventListener('click', () => {
+          select(index);
+          block.scrollIntoView({ block: 'center', behavior: 'smooth' });
+        });
+        item.append(button);
+        list.append(item);
+      });
+      select(Math.max(0, Math.min(selected, sections.length - 1)));
+    }
+
+    function move(from: number, to: number) {
+      if (!sections[from] || !sections[to] || from === to) return;
+      const [section] = sections.splice(from, 1);
+      sections.splice(to, 0, section);
+      selected = to;
+      render();
+      saveDraft();
+    }
+
+    for (const area of [canvas, list]) {
+      area.addEventListener('dragstart', (event) => {
+        if (!(event.target instanceof Element)) return;
+        const item = event.target.closest<HTMLElement>('[data-studio-index]');
+        if (!item || !event.dataTransfer) return;
+        dragging = Number(item.dataset.studioIndex);
+        event.dataTransfer.setData('text/plain', String(dragging));
+        event.dataTransfer.effectAllowed = 'move';
+      });
+      area.addEventListener('dragover', (event) => {
+        if (dragging !== undefined) event.preventDefault();
+      });
+      area.addEventListener('drop', (event) => {
+        if (!(event.target instanceof Element) || dragging === undefined) return;
+        const item = event.target.closest<HTMLElement>('[data-studio-index]');
+        if (!item) return;
+        event.preventDefault();
+        move(dragging, Number(item.dataset.studioIndex));
+        dragging = undefined;
+      });
+      area.addEventListener('dragend', () => { dragging = undefined; });
+    }
+
+    canvas.addEventListener('click', (event) => {
+      if (!(event.target instanceof Element)) return;
+      const block = event.target.closest<HTMLElement>('[data-studio-index]');
+      if (!block) return;
+      event.preventDefault();
+      select(Number(block.dataset.studioIndex));
+    });
+
+    for (const input of inputs) {
+      input.addEventListener('input', () => {
+        const section = sections[selected];
+        const element = canvas.children[selected];
+        if (!section || !element) return;
+        const key = input.dataset.editField as Exclude<keyof HomeSection, 'type'>;
+        section[key] = input.value;
+        fillBlock(element, section);
+        saveDraft();
+      });
+    }
+
+    function newModule(type: string): HomeSection {
+      const template = types.find((item) => item.type === type)!;
+      const { label, ...section } = template;
+      return section;
+    }
+
+    panel.addEventListener('click', (event) => {
+      if (!(event.target instanceof Element)) return;
+      const action = event.target.closest<HTMLButtonElement>('button[data-studio-action]')?.dataset.studioAction;
+      if (action === 'up') return move(selected, selected - 1);
+      if (action === 'down') return move(selected, selected + 1);
+      if (action === 'export') {
+        const url = URL.createObjectURL(new Blob([JSON.stringify({ sections }, null, 2) + '\n'], { type: 'application/json' }));
+        const download = document.createElement('a');
+        download.href = url;
+        download.download = 'home.json';
+        download.click();
+        window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+        status.textContent = '已导出 home.json';
+        return;
+      }
+      if (action === 'add') {
+        selected = sections.length;
+        sections.push(newModule(picker.value));
+      } else if (action === 'replace') {
+        sections[selected] = newModule(picker.value);
+      } else if (action === 'remove') {
+        sections.splice(selected, 1);
+      } else if (action === 'reset') {
+        sections = structuredClone(defaults);
+      } else {
+        return;
+      }
+      render();
+      saveDraft();
+    });
+
+    document.body.classList.add('studio-active');
+    panel.hidden = false;
+    render();
+  }
+</script>
+
+<style is:global>
+  .studio-active { padding-left: min(320px, 31vw); }
+  .home-studio { position: fixed; z-index: 30; inset: 0 auto 0 0; display: flex; flex-direction: column; width: min(320px, 31vw); background: #111c30; border-right: 1px solid #3e5780; color: #e5edff; font-size: 14px; }
+  .home-studio[hidden], .home-studio [hidden] { display: none; }
+  .studio-header, .studio-footer { padding: 14px; background: #192b45; }
+  .studio-header { display: flex; justify-content: space-between; align-items: baseline; gap: .8rem; }
+  .studio-header a { color: #a6bcf9; }
+  .studio-scroll { padding: 14px; overflow: auto; flex: 1; min-height: 0; }
+  .home-studio label { display: block; color: #d4def3; margin-top: 8px; }
+  .home-studio select, .home-studio input, .home-studio textarea { display: block; width: 100%; background: #0b1426; color: #f2f6ff; border: 1px solid #4b648b; padding: .35rem .45rem; border-radius: 4px; font: inherit; }
+  .home-studio fieldset { border: 1px solid #3d5174; margin: 12px 0 0; padding: 6px 9px 10px; }
+  .home-studio button { background: #24395c; color: #f0f5ff; border-radius: 4px; padding: .35rem .55rem; border: 1px solid #54729d; }
+  .home-studio button:disabled { opacity: .4; cursor: default; }
+  .home-studio button[aria-pressed="true"] { background: #355bda; }
+  .studio-actions { display: flex; flex-wrap: wrap; gap: .35rem; margin: 8px 0; }
+  .home-studio ol { margin: 8px 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+  .home-studio li { cursor: grab; }
+  .home-studio li button { width: 100%; text-align: left; }
+  .studio-footer p { margin: 0 0 7px; font-size: 12px; }
+  .studio-footer button:first-of-type { background: #345de1; }
+  .studio-active [data-studio-index] { cursor: grab; }
+  .studio-selected { outline: 2px solid #84a1ff; outline-offset: -2px; }
+  @media (max-width: 700px) {
+    .studio-active { padding-left: 0; padding-top: 47vh; }
+    .studio-active .site-header { position: static; }
+    .home-studio { inset: 0 0 auto; width: 100%; height: 47vh; border-right: 0; border-bottom: 1px solid #3e5780; }
+  }
+</style>

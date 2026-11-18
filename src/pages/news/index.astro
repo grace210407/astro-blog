@@ -1,0 +1,14 @@
+---
+import Site from '../../layouts/Site.astro';
+import NewsList from '../../components/NewsList.astro';
+import { news } from '../../data/site-settings.json';
+---
+<Site title={news.title} description={news.description}>
+  <section class="section news-page">
+    <div class="shell">
+      <p class="eyebrow">{news.eyebrow}</p>
+      <h1>{news.heading}</h1>
+      <NewsList />
+    </div>
+  </section>
+</Site>

@@ -1,0 +1,10 @@
+---
+import { siteHref } from '../data/site';
+interface Props {
+  action?: { label: string; url: string };
+  class?: string;
+}
+const { action, class: className = 'text-link' } = Astro.props;
+const href = siteHref(action?.url);
+---
+{href && action?.label && <a class={className} href={href}>{action.label} <span aria-hidden="true">↗</span></a>}

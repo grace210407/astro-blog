@@ -1,0 +1,83 @@
+---
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
+import '@fontsource/barlow-condensed/latin-800.css';
+import '@fontsource-variable/inter/wght.css';
+import '../styles/site.css';
+import { homeHas } from '../data/home';
+import { brand, emailHref, siteHref } from '../data/site';
+import settings from '../data/site-settings.json';
+
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+const fallbacks: Record<string, string> = {
+  '/#products': homeHas('headsets') ? '/#products' : '/products/bl10/',
+  '/#community': homeHas('community') ? '/#community' : brand.discord,
+  '/#partners': homeHas('partners') ? '/#partners' : '/about/#partners',
+};
+const navigationUrl = (url: string) => fallbacks[url] ?? siteHref(url);
+const nav = (settings.navigation ?? []).map(({ label, url }) => ({ label, href: navigationUrl(url) })).filter(({ label, href }) => label && href);
+const footer = (settings.footerLinks ?? []).map(({ label, url }) => ({ label, href: navigationUrl(url) })).filter(({ label, href }) => label && href);
+const contact = navigationUrl(settings.contactAction.url) || emailHref();
+const logo = siteHref(settings.logo);
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#080e1b" />
+    <meta name="robots" content={import.meta.env.PUBLIC_INDEXABLE === 'true' ? 'index, follow' : 'noindex, nofollow'} />
+    <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip" href="#main">{settings.skipLabel}</a>
+    <header class="site-header">
+      <div class="shell header-bar">
+        <a class="brand" href="/" aria-label={settings.brandName + ' home'}>
+          {logo ? <img src={logo} alt="" width="120" /> : settings.brandName}
+          {logo && settings.logoCompanion && <span>{settings.logoCompanion}</span>}
+        </a>
+        <nav class="desktop-nav" aria-label="Main navigation">
+          {nav.map(({ label, href }) => <a href={href} aria-current={href === Astro.url.pathname ? 'page' : undefined}>{label}</a>)}
+        </nav>
+        <a class="button compact header-contact" href={contact}>{settings.contactAction.label} <span aria-hidden="true">↗</span></a>
+        <details class="mobile-menu">
+          <summary>{settings.menuLabel} <span aria-hidden="true">+</span></summary>
+          <nav aria-label="Mobile navigation">
+            {nav.map(({ label, href }) => <a href={href} aria-current={href === Astro.url.pathname ? 'page' : undefined}>{label}</a>)}
+            <a href={contact}>{settings.contactAction.label}</a>
+          </nav>
+        </details>
+      </div>
+    </header>
+    <main id="main"><slot /></main>
+    <footer class="site-footer">
+      <div class="shell footer-bar">
+        <a class="brand" href="/" aria-label={settings.brandName + ' home'}>
+          {logo ? <img src={logo} alt="" width="120" /> : settings.brandName}
+          {logo && settings.logoCompanion && <span>{settings.logoCompanion}</span>}
+        </a>
+        <div class="footer-links">
+          {footer.map(({ label, href }) => <a href={href}>{label}</a>)}
+        </div>
+        {brand.social.length > 0 && <div class="footer-social">
+          <small>{settings.followLabel}</small>
+          {brand.social.map(({ label, url, image }) => (
+            <a class:list={['social-icon', siteHref(image) && 'social-icon-image']} href={url} target="_blank" rel="noopener noreferrer" aria-label={label} title={label}>
+              {siteHref(image) ? <img src={siteHref(image)} width="19" height="19" alt="" /> : label}
+            </a>
+          ))}
+        </div>}
+      </div>
+    </footer>
+    <script>
+      const mobile = document.querySelector<HTMLDetailsElement>('.mobile-menu');
+      mobile?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+        mobile.open = false;
+      }));
+    </script>
+  </body>
+</html>

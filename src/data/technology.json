@@ -1,0 +1,78 @@
+{
+  "title": "Technology | BLUCALM Gaming",
+  "description": "Explore BLUCALM audio development, acoustic and mechanical testing, and electronics production.",
+  "hero": {
+    "eyebrow": "BLUCALM Technology",
+    "heading": "From the bench to your setup.",
+    "text": "A look at the audio engineering, testing and production behind gaming headsets and desktop audio controls.",
+    "image": "/media/technology/audio-development.webp",
+    "imageAlt": "An engineer probes a circuit board at an audio workstation with an oscilloscope",
+    "caption": "Audio development bench"
+  },
+  "sections": [
+    {
+      "eyebrow": "Audio development",
+      "heading": "The signal behind the sound.",
+      "text": "Digital signal processing lets us tune playback and shape microphone audio. On USB headset models with ENC, the microphone array helps reduce background noise in team chat.",
+      "photos": [
+        {
+          "image": "/media/technology/dsp-concept.webp",
+          "imageAlt": "Illustration of a microchip and circuit traces lit in blue",
+          "caption": "Concept illustration · digital signal processing"
+        },
+        {
+          "image": "/media/technology/headset-design-sketch.webp",
+          "imageAlt": "Headset sketches show how the headband and earcups fit",
+          "caption": "Headset fit and form studies"
+        }
+      ]
+    },
+    {
+      "eyebrow": "Testing",
+      "heading": "Check the sound. Check the hardware.",
+      "text": "Acoustic measurements help evaluate playback and microphone pickup. Mechanical checks can cover repeated connector insertion and movement of the headband or microphone boom, depending on the model.",
+      "photos": [
+        {
+          "image": "/media/technology/acoustic-test-fixture.webp",
+          "imageAlt": "A head and torso acoustic test fixture in a treated room",
+          "caption": "Acoustic measurement setup"
+        },
+        {
+          "image": "/media/technology/quality-check-station.webp",
+          "imageAlt": "An operator loads a production test station",
+          "caption": "Production test station"
+        }
+      ]
+    },
+    {
+      "eyebrow": "Production",
+      "heading": "From the circuit board to assembly.",
+      "text": "Electronics production starts with the circuit board. Assembly and functional checks help verify that controls, connectors and audio work together before packing.",
+      "photos": [
+        {
+          "image": "/media/technology/electronics-production.webp",
+          "imageAlt": "A machine and control panel on an electronics production line",
+          "caption": "Electronics production equipment"
+        },
+        {
+          "image": "/media/technology/assembled-pcb.webp",
+          "imageAlt": "A close-up of populated green printed circuit boards",
+          "caption": "Populated circuit boards"
+        },
+        {
+          "image": "/media/technology/production-workstation.webp",
+          "imageAlt": "Operators working along an electronics assembly line",
+          "caption": "Assembly workstations"
+        }
+      ]
+    }
+  ],
+  "callout": {
+    "heading": "See how it comes together in BL10.",
+    "text": "Control the balance between game audio and team chat from your desktop.",
+    "action": {
+      "label": "Explore BL10",
+      "url": "/products/bl10/"
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "model": "BL01",
+  "image": "/media/bl01.webp",
+  "feature": "Suspension fit",
+  "summary": "50 mm drivers and a self-adjusting headband.",
+  "category": "Wired Gaming Headset",
+  "headline": "50 mm drivers. A fit that adjusts to you.",
+  "description": "A self-adjusting suspension headband and soft over-ear cushions keep the fit simple. Choose digital USB-A or 3.5 mm analog audio.",
+  "features": [
+    {
+      "title": "Self-adjusting fit",
+      "text": "The suspension headband settles into place as you put the headset on."
+    },
+    {
+      "title": "Game-tuned 50 mm drivers",
+      "text": "Full-size drivers deliver game audio, dialogue and music through an over-ear design."
+    },
+    {
+      "title": "Dual-mic ENC over USB",
+      "text": "One microphone captures speech and a second picks up ambient sound for noise reduction."
+    }
+  ],
+  "specs": [
+    {
+      "label": "Drivers",
+      "value": "50 mm"
+    },
+    {
+      "label": "Frequency response",
+      "value": "20 Hz–20 kHz"
+    },
+    {
+      "label": "Fit",
+      "value": "Over-ear"
+    }
+  ],
+  "variants": [
+    {
+      "name": "USB-A wired",
+      "description": "Digital audio with dual-mic ENC and RGB lighting.",
+      "specs": [
+        {
+          "label": "Cable length",
+          "value": "2.0 m ± 0.15 m"
+        },
+        {
+          "label": "USB audio and volume sync",
+          "value": "Windows, macOS and Linux"
+        },
+        {
+          "label": "Audio control software",
+          "value": "Windows only. Four presets, custom EQ and adjustable sidetone."
+        },
+        {
+          "label": "Peak limiter",
+          "value": "Factory preset"
+        }
+      ]
+    },
+    {
+      "name": "3.5 mm wired",
+      "description": "Analog audio for devices with a compatible headset jack. Plug into BL10 for desktop Game/Chat control on Windows.",
+      "specs": [
+        {
+          "label": "Connector",
+          "value": "3.5 mm CTIA"
+        }
+      ],
+      "action": {
+        "label": "Explore the BL10 controller",
+        "url": "/products/bl10/"
+      }
+    }
+  ],
+  "imageAlt": "BL01 over-ear gaming headset with boom microphone",
+  "specsLabel": "View specifications",
+  "inquiryLabel": "Request product information",
+  "inquirySubject": "BL01 Product Inquiry",
+  "partnerHeading": "Bring BL01 to your market.",
+  "partnerText": "Contact BLUCALM for samples, sales materials and regional distribution.",
+  "partnerLabel": "Discuss partnership"
+}

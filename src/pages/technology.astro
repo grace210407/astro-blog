@@ -1,0 +1,54 @@
+---
+import Site from '../layouts/Site.astro';
+import ContentLink from '../components/ContentLink.astro';
+import ContentPhoto from '../components/ContentPhoto.astro';
+import page from '../data/technology.json';
+
+const { hero, sections = [], callout } = page;
+---
+<Site title={page.title} description={page.description}>
+  <section class="technology-hero">
+    <div class="shell technology-hero-grid">
+      <div>
+        {hero.eyebrow && <p class="eyebrow">{hero.eyebrow}</p>}
+        <h1>{hero.heading}</h1>
+        {hero.text && <p class="technology-lede">{hero.text}</p>}
+      </div>
+      <ContentPhoto photo={hero} highPriority />
+    </div>
+  </section>
+
+  {sections.length > 0 && (
+    <nav class="technology-jump" aria-label={hero.eyebrow || hero.heading}>
+      <div class="shell">
+        {sections.map(({ eyebrow, heading }, index) => <a href={`#technology-${index + 1}`}>{eyebrow || heading} <span aria-hidden="true">↓</span></a>)}
+      </div>
+    </nav>
+  )}
+  {sections.map(({ eyebrow, heading, text, photos }, index) => (
+    <section id={`technology-${index + 1}`} class="section technology-section">
+      <div class="shell">
+        <div class="technology-section-header">
+          <div>
+            {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+            <h2>{heading}</h2>
+          </div>
+          {text && <p class="editable-copy">{text}</p>}
+        </div>
+        {photos?.length > 0 && (
+          <div class="technology-photos">
+            {photos.map((photo) => <ContentPhoto photo={photo} />)}
+          </div>
+        )}
+      </div>
+    </section>
+  ))}
+  {callout?.heading && (
+    <section class="partners">
+      <div class="shell partners-grid">
+        <h2>{callout.heading}</h2>
+        <div><p>{callout.text}</p><ContentLink action={callout.action} class="button button-white" /></div>
+      </div>
+    </section>
+  )}
+</Site>

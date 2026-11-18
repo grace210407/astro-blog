@@ -1,0 +1,51 @@
+{
+  "title": "BLUCALM Gaming | Desktop Game Audio",
+  "description": "Meet BL10, the desktop game audio controller for PC setups with 3.5 mm headsets. Explore BLUCALM gaming headsets, demos and regional partnerships.",
+  "heroAction": {
+    "label": "Explore BL10",
+    "url": "/products/bl10/"
+  },
+  "demoAction": {
+    "label": "View BL10 setup guides",
+    "url": "/products/bl10/#videos"
+  },
+  "demoLabel": "Watch the ChatMix feature demo",
+  "headsetLabel": "Explore",
+  "companyCards": [
+    {
+      "heading": "Audio R&D",
+      "text": "",
+      "action": {
+        "label": "Explore our technology",
+        "url": "/technology/"
+      }
+    },
+    {
+      "heading": "Product guides",
+      "text": "See how to route game and voice chat audio in Windows, then adjust the mix on BL10.",
+      "action": {
+        "label": "Explore the tutorials",
+        "url": "/products/bl10/#videos"
+      }
+    },
+    {
+      "heading": "Partner development",
+      "text": "Discuss product evaluation, market requirements and materials for your regional launch.",
+      "action": {
+        "label": "About BLUCALM",
+        "url": "/about/"
+      }
+    }
+  ],
+  "newsAction": {
+    "label": "View All News",
+    "url": "/news/"
+  },
+  "discordLabel": "Join Our Discord",
+  "discordFallbackLabel": "Request an invite",
+  "discordSubject": "BLUCALM Discord Invite",
+  "partnerLabel": "Discuss Partnership",
+  "partnerSubject": "BLUCALM Gaming Partnership",
+  "informationLabel": "Request Product Information",
+  "informationSubject": "BLUCALM Gaming Product Information"
+}

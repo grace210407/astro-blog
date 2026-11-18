@@ -1,0 +1,13 @@
+---
+import { siteHref } from '../data/site';
+interface Props {
+  photo: { image?: string; imageAlt?: string; caption?: string };
+  highPriority?: boolean;
+}
+const { photo, highPriority = false } = Astro.props;
+const src = siteHref(photo.image);
+---
+{src && <figure class="content-photo">
+  <img src={src} alt={photo.imageAlt ?? ''} loading={highPriority ? 'eager' : 'lazy'} fetchpriority={highPriority ? 'high' : 'auto'} decoding="async" />
+  {photo.caption && <figcaption>{photo.caption}</figcaption>}
+</figure>}
